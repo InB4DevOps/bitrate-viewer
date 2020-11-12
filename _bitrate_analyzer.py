@@ -24,7 +24,7 @@ def analyze_bitrate(video_path, format='xml'):
                              '-show_streams',
                              '-threads', str(cpu_count),
                              '-loglevel', 'quiet',
-                             '-show_entries', 'frame=pkt_size',
+                             # '-show_entries', 'frame=pkt_size',
                              '-print_format', 'xml' if format == 'xml' else
                                               'json',
                              '-select_streams', 'v:0',
