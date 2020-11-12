@@ -1,6 +1,6 @@
 from argparse import ArgumentParser, RawTextHelpFormatter
-from pathlib import Path
 import os
+from pathlib import Path
 import sys
 
 from _bitrate_analyzer import analyze_bitrate
@@ -15,7 +15,7 @@ def main():
     parser = ArgumentParser(formatter_class=RawTextHelpFormatter)
     parser.add_argument('-i', '--input-video-path', type=str, required=True,
                         help='Enter the path of the original '
-                             'video. A relative or absolute path can be'
+                             'video. A relative or absolute path can be '
                              'specified.')
     parser.add_argument('-f', '--output-format',
                         type=str, default='xml', choices=['xml', 'json'],
@@ -33,8 +33,13 @@ def main():
 
     results = analyze_bitrate(video_file, output_format)
     print('Done. Now plotting results ...')
-    plot_results(results, Path(video_file).name)
-    print(f'Done. Check bitrate_graph.png and bitrate.{output_format}!')
+
+    graph_title = Path(video_file).name
+    graph_filename = Path(video_file).stem
+
+    plot_results(results, graph_title, graph_filename)
+    print(f'Done. Check {graph_filename}.png and '
+          f'{graph_filename}.{output_format}!')
 
 
 if __name__ == "__main__":

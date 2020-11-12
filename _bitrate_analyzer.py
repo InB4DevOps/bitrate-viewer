@@ -1,5 +1,6 @@
 import io
 from math import trunc
+from pathlib import Path
 import multiprocessing
 import subprocess
 from tqdm import tqdm
@@ -14,7 +15,7 @@ def analyze_bitrate(video_path, format='xml'):
     fps_rounded = round(fps)
     cpu_count = multiprocessing.cpu_count()
     total_frames = trunc(int(duration) * fps) + 1
-    output_filename = f'bitrate.{format}'
+    output_filename = f'{Path(video_path).stem}.{format}'
     file = open(output_filename, 'w')
 
     print(f'Now analyzing ~ {total_frames} frames.')
