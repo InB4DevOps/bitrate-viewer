@@ -28,12 +28,9 @@ def get_mbit_str(megabits):
 
 
 def get_pretty_codec_name(codec):
-    result = str()
-    if codec == 'h264':
-        result = 'H.264 (AVC)'
-    elif codec == 'hevc':
-        result = 'H.265 (HEVC)'
-    else:
-        result = codec
+    dict = {
+                'h264': 'H.264 (AVC)',
+                'hevc': 'H.265 (HEVC)'
+            }
 
-    return result
+    return dict.get(codec, codec)
