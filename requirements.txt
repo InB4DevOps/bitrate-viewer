@@ -1,0 +1,4 @@
+numpy==1.19.3
+matplotlib
+tqdm
+ffmpeg-python==0.2.0
