@@ -16,7 +16,7 @@ def analyze_bitrate(video_path, format='xml'):
     cpu_count = multiprocessing.cpu_count()
     total_frames = trunc(int(duration) * fps) + 1
     output_filename = f'{Path(video_path).stem}.{format}'
-    file = open(output_filename, 'w')
+    file = open(output_filename, 'w', encoding="utf-8")
 
     print(f'Now analyzing ~ {total_frames} frames.')
     progress_bar = tqdm(total_frames, unit=' frames', ncols=80)
