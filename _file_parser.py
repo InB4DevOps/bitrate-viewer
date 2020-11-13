@@ -3,11 +3,9 @@ import xml.etree.ElementTree as ET
 
 
 class FileParser:
-    def __init__(self):
-        self.__result = ([], [], str())
-
     def __calculate_bitrate_per_sec(self, bitrates):
-        seconds, bitrates_per_sec, _ = self.__result
+        seconds = []
+        bitrates_per_sec = []
         current_second = 1
         current_bitrate = 0
         frame_count = 0
@@ -22,6 +20,8 @@ class FileParser:
                 current_bitrate = 0
                 frame_count = 0
                 current_second += 1
+
+        return seconds, bitrates_per_sec
 
     def __load_xml(self):
         """
@@ -73,9 +73,6 @@ class FileParser:
         elif format == 'json':
             bitrates, encoder = self.__load_json()
 
-        result_list = list(self.__result)
-        result_list[2] = encoder
-        self.__result = tuple(result_list)
+        seconds, bitrates_per_sec = self.__calculate_bitrate_per_sec(bitrates)
 
-        self.__calculate_bitrate_per_sec(bitrates)
-        return self.__result
+        return tuple([seconds, bitrates_per_sec, encoder])
