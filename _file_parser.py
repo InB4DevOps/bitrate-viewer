@@ -25,26 +25,28 @@ class FileParser:
 
     def __load_xml(self):
         """
-        Loads bitrate from frames in XML file
+        Loads bitrate and I-frames from XML file
         """
         bitrates = []
+        keyframes = []
         root = ET.parse(self.__filename).getroot()
         for frame in root.findall('frames/frame'):
             value = int(frame.get('pkt_size'))
             bitrates.append(value * 8)  # pkt_size is in byte
 
+            if int(frame.get('key_frame')) == 1:
+                keyframes.append(float(frame.get('pkt_pts_time')))
+
         streams = root.findall('streams/stream')
-        # stream = streams[0]
         encoder = streams[0].get('codec_name')
-        # stream = streams[0]
-        # encoder = stream.get('codec_name')
-        return bitrates, encoder
+        return bitrates, keyframes, encoder
 
     def __load_json(self):
         """
-        Loads bitrate from frames in JSON file
+        Loads bitrate and I-frames JSON file
         """
         bitrates = []
+        keyframes = []
         read_file = open(self.__filename, 'r')
         data = json.load(read_file)
 
@@ -52,10 +54,13 @@ class FileParser:
             value = int(frame['pkt_size'])
             bitrates.append(value * 8)  # pkt_size is in byte
 
+            if int(frame['key_frame']) == 1:
+                keyframes.append(float(frame['pkt_pts_time']))
+
         encoder = data['streams'][0]['codec_name']
         read_file.close()
 
-        return bitrates, encoder
+        return bitrates, keyframes, encoder
 
     def run(self, filename, format, fps):
         """
@@ -63,16 +68,17 @@ class FileParser:
         and sums it up every <fps> seconds to calculate the bitrate / second.
         """
         bitrates = []
+        keyframes = []
         encoder = str()
         self.__format = format
         self.__fps = fps
         self.__filename = filename
 
         if format == 'xml':
-            bitrates, encoder = self.__load_xml()
+            bitrates, keyframes, encoder = self.__load_xml()
         elif format == 'json':
-            bitrates, encoder = self.__load_json()
+            bitrates, keyframes, encoder = self.__load_json()
 
         seconds, bitrates_per_sec = self.__calculate_bitrate_per_sec(bitrates)
 
-        return tuple([seconds, bitrates_per_sec, encoder])
+        return tuple([seconds, bitrates_per_sec, keyframes, encoder])
