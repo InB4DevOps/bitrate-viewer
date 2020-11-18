@@ -6,7 +6,7 @@ class FileParser:
     def __calculate_bitrate_per_sec(self, bitrates):
         seconds = []
         bitrates_per_sec = []
-        current_second = 1
+        current_second = 0
         current_bitrate = 0
         frame_count = 0
 
