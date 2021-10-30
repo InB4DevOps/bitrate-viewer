@@ -29,4 +29,4 @@ Example: `python main.py -i video.mp4 -f json`
 This forces FFprobe to write its output in JSON (default is XML) and saves it as <video_file_name>.json.
 The graph will be saved as <video_file_name>.png.
 
-Special thanks to [@BassThatHertz]( https://github.com/BassThatHertz ) for helping me along the way.
+Special thanks to [@CrypticSignal]( https://github.com/CrypticSignal ) for helping me along the way.
