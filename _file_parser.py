@@ -23,6 +23,18 @@ class FileParser:
 
         return seconds, bitrates_per_sec
 
+    def __read_key_frame_time(self, frame) -> float:
+        """
+        reads frame time from pkt_pts_time if it exists
+        or uses pkt_dts_time otherwise
+        returns None if neither exists
+        """
+        frame_time = frame.get('pkt_pts_time')
+        if not frame_time:
+            frame_time = frame.get('pkt_dts_time')
+
+        return (float(frame_time)) if frame_time else None
+
     def __load_xml(self):
         """
         Loads bitrate and I-frames from XML file
@@ -35,7 +47,9 @@ class FileParser:
             bitrates.append(value * 8)  # pkt_size is in byte
 
             if int(frame.get('key_frame')) == 1:
-                keyframes.append(float(frame.get('pkt_pts_time')))
+                keyframe_time = self.__read_key_frame_time(frame)
+                if keyframe_time:
+                    keyframes.append(keyframe_time)
 
         streams = root.findall('streams/stream')
         encoder = streams[0].get('codec_name')
@@ -55,7 +69,9 @@ class FileParser:
             bitrates.append(value * 8)  # pkt_size is in byte
 
             if int(frame['key_frame']) == 1:
-                keyframes.append(float(frame['pkt_pts_time']))
+                keyframe_time = self.__read_key_frame_time(frame)
+                if keyframe_time:
+                    keyframes.append(keyframe_time)
 
         encoder = data['streams'][0]['codec_name']
         read_file.close()
