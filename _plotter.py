@@ -5,7 +5,7 @@ import numpy as np
 from _utils import get_mbit_str, get_pretty_codec_name
 
 
-def plot_results(results, graph_title, graph_filename):
+def plot_results(results, graph_title, graph_filename, font=''):
     seconds, bitrates, keyframes, encoder = results
 
     number_of_keyframes = len(keyframes)
@@ -24,6 +24,8 @@ def plot_results(results, graph_title, graph_filename):
     encoder = get_pretty_codec_name(encoder)
 
     # init the plot
+    if font:
+        plt.rcParams['font.sans-serif'] = font
     plt.figure(figsize=(19.20, 10.80))
     plt.suptitle(f'{graph_title} | Codec: {encoder}\n\
                 Min: {min_bitrate} | Max: {max_bitrate} | Standard Deviation: '
