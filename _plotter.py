@@ -52,5 +52,6 @@ def plot_results(results, graph_title, graph_filename, save_filename=None):
 
     # save the plot
     plt.savefig(f'{graph_filename}.png')
-    
-    save_to_file(save_filename,avg_bitrate,min_bitrate,max_bitrate)
+    #save to csv
+    if save_filename:
+        save_to_file(save_filename,avg_bitrate,min_bitrate,max_bitrate)
