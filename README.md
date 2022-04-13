@@ -22,7 +22,7 @@ optional arguments:
   -f {xml,json}, --output-format {xml,json}
                         Specify the output format for the file written
                         by FFProbe. (default: 'xml')
-  -s {csv}, --save-file {xml,json}
+  -s {csv}, --save-file DATA.CSV
                         Specify optional csv file to save avg, min, and max bitrate)
 ```
 
