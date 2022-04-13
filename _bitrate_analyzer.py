@@ -6,12 +6,13 @@ import subprocess
 from tqdm import tqdm
 
 from _file_parser import FileParser
-from _utils import get_framerate_float, get_duration
+from _utils import get_framerate_float, get_duration, get_video_metadata
 
 
 def analyze_bitrate(video_path, format='xml'):
-    duration = round(float(get_duration(video_path)), 2)
-    fps = get_framerate_float(video_path)
+    video_metadata = get_video_metadata(video_path)
+    duration = round(float(get_duration(video_metadata)), 2)
+    fps = get_framerate_float(video_metadata)
     fps_rounded = round(fps)
     cpu_count = multiprocessing.cpu_count()
     total_frames = trunc(int(duration) * fps) + 1

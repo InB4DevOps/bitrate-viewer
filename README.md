@@ -22,9 +22,11 @@ optional arguments:
   -f {xml,json}, --output-format {xml,json}
                         Specify the output format for the file written
                         by FFProbe. (default: 'xml')
+  -s {csv}, --save-file {xml,json}
+                        Specify optional csv file to save avg, min, and max bitrate)
 ```
 
-Example: `python main.py -i video.mp4 -f json`
+Example: `python main.py -i video.mp4 -s data.csv -f json`
 
 This forces FFprobe to write its output in JSON (default is XML) and saves it as <video_file_name>.json.
 The graph will be saved as <video_file_name>.png.
