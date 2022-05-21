@@ -31,28 +31,28 @@ def main():
 
     video_file = arguments.input_video_path
     output_format = arguments.output_format
-    save_file = arguments.save_file
+    OUTPUT_FILENAME = arguments.OUTPUT_FILENAME
 
-    dir_output = "./BitRate_Reports"
+    DIR_OUTPUT = "./BitRate_Reports"
 
     if not os.path.exists(video_file):
         print('File specified for -i could not be found. Exiting.')
         sys.exit()
-    if not os.path.isdir(dir_output):
-        os.mkdir(dir_output)
-    csv_file_path = os.path.join(dir_output,save_file)
+    if not os.path.isdir(DIR_OUTPUT):
+        os.mkdir(DIR_OUTPUT)
+    csv_file_path = os.path.join(DIR_OUTPUT,OUTPUT_FILENAME)
 
-    results = analyze_bitrate(video_file, output_format,dir_output)
+    results = analyze_bitrate(video_file, output_format,DIR_OUTPUT)
     print('Done. Now plotting results ...')
 
     graph_title = Path(video_file).name
     graph_filename = Path(video_file).stem
 
-    plot_results(results, graph_title, graph_filename, csv_file_path,dir_output)
+    plot_results(results, graph_title, graph_filename, csv_file_path,DIR_OUTPUT)
     print(f'Done. Check {graph_filename}.png and '
           f'{graph_filename}.{output_format}!')
-    if save_file:
-        print(f'Saved to {save_file}')
+    if OUTPUT_FILENAME:
+        print(f'Saved to {OUTPUT_FILENAME}')
 
 
 if __name__ == "__main__":
