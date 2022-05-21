@@ -1,4 +1,5 @@
 import math
+from os import path
 from ffmpeg import probe
 
 
@@ -40,5 +41,9 @@ def get_pretty_codec_name(codec):
     return dict.get(codec, codec)
     
 def save_to_file(csv_filename, avg_bitrate, min_bitrate, max_bitrate):
+    if not path.isfile(csv_filename):
+        with open(csv_filename, 'a') as file:
+            file.write("Average Bitrate,Minimum Bitrate,Max BitRate" + "\n")
+        
     with open(csv_filename, 'a') as file:
         file.write(avg_bitrate + "," + min_bitrate+ "," + max_bitrate + "," +"\n")

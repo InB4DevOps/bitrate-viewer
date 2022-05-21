@@ -4,19 +4,20 @@ from pathlib import Path
 import multiprocessing
 import subprocess
 from tqdm import tqdm
+from os import path
 
 from _file_parser import FileParser
 from _utils import get_framerate_float, get_duration, get_video_metadata
 
 
-def analyze_bitrate(video_path, format='xml'):
+def analyze_bitrate(video_path, format='xml',dir_name=None):
     video_metadata = get_video_metadata(video_path)
     duration = round(float(get_duration(video_metadata)), 2)
     fps = get_framerate_float(video_metadata)
     fps_rounded = round(fps)
     cpu_count = multiprocessing.cpu_count()
     total_frames = trunc(int(duration) * fps) + 1
-    output_filename = f'{Path(video_path).stem}.{format}'
+    output_filename = path.join(dir_name,f'{Path(video_path).stem}.{format}')
     file = open(output_filename, 'w', encoding="utf-8")
 
     print(f'Now analyzing ~ {total_frames} frames.')

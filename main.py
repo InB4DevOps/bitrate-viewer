@@ -1,5 +1,6 @@
 from argparse import ArgumentParser, RawTextHelpFormatter
 from importlib.resources import path
+from operator import concat
 import os
 from pathlib import Path
 import sys
@@ -32,17 +33,22 @@ def main():
     output_format = arguments.output_format
     save_file = arguments.save_file
 
+    dir_output = "./BitRate_Reports"
+
     if not os.path.exists(video_file):
         print('File specified for -i could not be found. Exiting.')
         sys.exit()
+    if not os.path.isdir(dir_output):
+        os.mkdir(dir_output)
+    csv_file_path = os.path.join(dir_output,save_file)
 
-    results = analyze_bitrate(video_file, output_format)
+    results = analyze_bitrate(video_file, output_format,dir_output)
     print('Done. Now plotting results ...')
 
     graph_title = Path(video_file).name
     graph_filename = Path(video_file).stem
 
-    plot_results(results, graph_title, graph_filename, save_file)
+    plot_results(results, graph_title, graph_filename, csv_file_path,dir_output)
     print(f'Done. Check {graph_filename}.png and '
           f'{graph_filename}.{output_format}!')
     if save_file:

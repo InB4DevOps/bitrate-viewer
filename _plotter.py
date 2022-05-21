@@ -1,11 +1,12 @@
 import matplotlib.lines as mlines
 import matplotlib.pyplot as plt
 import numpy as np
+import os
 
 from _utils import get_mbit_str, get_pretty_codec_name, get_video_metadata, save_to_file
 
 
-def plot_results(results, graph_title, graph_filename, save_filename=None):
+def plot_results(results, graph_title, graph_filename, save_filename=None,dir_name=None):
     seconds, bitrates, keyframes, encoder = results
 
     number_of_keyframes = len(keyframes)
@@ -51,7 +52,7 @@ def plot_results(results, graph_title, graph_filename, save_filename=None):
                loc='lower right')
 
     # save the plot
-    plt.savefig(f'{graph_filename}.png')
+    plt.savefig(os.path.join(dir_name, f'{graph_filename}.png'))
     #save to csv
-    if save_filename:
+    if save_filename and dir_name:
         save_to_file(save_filename,avg_bitrate,min_bitrate,max_bitrate)
