@@ -3,29 +3,35 @@ from os import path
 from ffmpeg import probe
 
 
+class VideoAttributeExtractor():
+    def __init__(self, video_path) -> None:
+        self.source_file = video_path
 
-def get_video_metadata(video_path) -> dict:
-    return probe(video_path)
+    @property 
+    def video_attributes() -> dict:
+        if not self._video_attributes: 
+            return probe(self.source_file)
+        return self._video_attributes: 
 
-def get_bitrate(video_metadata) -> str:
-    bitrate = video_metadata['format']['bit_rate']
-    return f'{math.trunc(int(bitrate) / 1000)} kbit/s'
-
-
-def get_framerate_fraction(video_metadata) -> str:
-    r_frame_rate = [stream for stream in video_metadata['streams']
-                    if stream['codec_type'] == 'video'][0][
-        'r_frame_rate']
-    return r_frame_rate
-
-
-def get_framerate_float(video_metadata) -> str:
-    numerator, denominator = get_framerate_fraction(video_metadata).split('/')
-    return round((int(numerator) / int(denominator)), 3)
+    def get_bitrate(self) -> str:
+        bitrate = self.video_attributes['format']['bit_rate']
+        return f'{math.trunc(int(bitrate) / 1000)} kbit/s'
 
 
-def get_duration(video_metadata) -> str:
-    return video_metadata['format']['duration']
+    def get_framerate_fraction(self) -> str:
+        r_frame_rate = [stream for stream in self.video_attributes['streams']
+                        if stream['codec_type'] == 'video'][0][
+            'r_frame_rate']
+        return r_frame_rate
+
+
+    def get_framerate_float(self) -> str:
+        numerator, denominator = get_framerate_fraction(self.video_attributes).split('/')
+        return round((int(numerator) / int(denominator)), 3)
+
+
+    def get_duration(self) -> str:
+        return self.video_attributes['format']['duration']
 
 
 def get_mbit_str(megabits) -> str:
