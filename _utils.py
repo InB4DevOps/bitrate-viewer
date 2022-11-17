@@ -38,7 +38,7 @@ def get_mbit_str(megabits) -> str:
     return f'{megabits} Mbps'
 
 
-def get_pretty_codec_name(codec):
+def get_pretty_codec_name(codec) -> dict:
     dict = {
                 'h264': 'H.264 (AVC)',
                 'hevc': 'H.265 (HEVC)'
