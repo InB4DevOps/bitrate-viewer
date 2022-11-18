@@ -1,4 +1,6 @@
 # bitrate-viewer
+
+**Fork and personalization of useful tool to learn from** 
 Plots a graph showing the variation of the bitrate as well as up to 75 I-Frames throughout your video. The average bitrate is shown on the legend. In addition to this, the minimum, maximum and standard deviation is shown above the graph. See the example below:
 
 
