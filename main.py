@@ -8,6 +8,8 @@ import sys
 from _bitrate_analyzer import analyze_bitrate
 from _plotter import plot_results
 
+DIR_OUTPUT = "./BitRate_Reports"
+
 
 def main():
     if len(sys.argv) == 1:
@@ -23,7 +25,7 @@ def main():
                         type=str, default='xml', choices=['xml', 'json'],
                         help='Specify the output format for the file written\n'
                              'by FFProbe. (default: \'xml\')')
-    parser.add_argument('-s', '--save-file',
+    parser.add_argument('-csv', '--csv-file',
                         type=str, default=None,
                         help='Specify a csv filename to save to avg,min,max data.\n')
 
@@ -31,28 +33,33 @@ def main():
 
     video_file = arguments.input_video_path
     output_format = arguments.output_format
-    OUTPUT_FILENAME = arguments.OUTPUT_FILENAME
+    CSV_OUTPUT_FILENAME = arguments.csv_file
 
-    DIR_OUTPUT = "./BitRate_Reports"
 
     if not os.path.exists(video_file):
         print('File specified for -i could not be found. Exiting.')
         sys.exit()
     if not os.path.isdir(DIR_OUTPUT):
         os.mkdir(DIR_OUTPUT)
-    csv_file_path = os.path.join(DIR_OUTPUT,OUTPUT_FILENAME)
 
-    results = analyze_bitrate(video_file, output_format,DIR_OUTPUT)
+    csv_file_path = os.path.join(
+        DIR_OUTPUT, CSV_OUTPUT_FILENAME)
+
+    results = analyze_bitrate(
+        video_file, output_format, DIR_OUTPUT)
+        
     print('Done. Now plotting results ...')
 
     graph_title = Path(video_file).name
     graph_filename = Path(video_file).stem
 
-    plot_results(results, graph_title, graph_filename, csv_file_path,DIR_OUTPUT)
+    plot_results(
+        results, graph_title, graph_filename,csv_file_path, DIR_OUTPUT)
+
     print(f'Done. Check {graph_filename}.png and '
           f'{graph_filename}.{output_format}!')
-    if OUTPUT_FILENAME:
-        print(f'Saved to {OUTPUT_FILENAME}')
+    if CSV_OUTPUT_FILENAME:
+        print(f'Saved to {CSV_OUTPUT_FILENAME}')
 
 
 if __name__ == "__main__":

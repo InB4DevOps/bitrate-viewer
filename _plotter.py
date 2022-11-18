@@ -3,10 +3,13 @@ import matplotlib.pyplot as plt
 import numpy as np
 import os
 
-from _utils import get_mbit_str, get_pretty_codec_name, get_video_metadata, save_to_file
+from _utils import (
+    get_mbit_str,
+    get_pretty_codec_name,
+    save_to_file)
 
 
-def plot_results(results, graph_title, graph_filename, save_filename=None,dir_name=None):
+def plot_results(results, graph_title, graph_filename, csv_file_name=None, dir_name=None):
     seconds, bitrates, keyframes, encoder = results
 
     number_of_keyframes = len(keyframes)
@@ -17,25 +20,25 @@ def plot_results(results, graph_title, graph_filename, save_filename=None,dir_na
               'Plotting the bitrate graph without I-frame markings...')
         # drop keyframes
         keyframes = []
-
-    avg_bitrate = get_mbit_str(round(np.mean(bitrates), 2))
-    min_bitrate = get_mbit_str(round(min(bitrates), 2))
-    max_bitrate = get_mbit_str(round(max(bitrates), 2))
-    std_bitrate = get_mbit_str(round(np.std(bitrates), 2))
-    encoder = get_pretty_codec_name(encoder)
+    bit_rate_data = {}
+    bit_rate_data['avg_bitrate'] = get_mbit_str(round(np.mean(bitrates), 2))
+    bit_rate_data['min_bitrate'] = get_mbit_str(round(min(bitrates), 2))
+    bit_rate_data['max_bitrate'] = get_mbit_str(round(max(bitrates), 2))
+    bit_rate_data['std_bitrate'] = get_mbit_str(round(np.std(bitrates), 2))
+    bit_rate_data['encoder'] = get_pretty_codec_name(encoder)
 
     # init the plot
     plt.figure(figsize=(19.20, 10.80))
     plt.suptitle(f'{graph_title} | Codec: {encoder}\n\
-                Min: {min_bitrate} | Max: {max_bitrate} | Standard Deviation: '
-                 f'{std_bitrate}')
+                Min: {bit_rate_data["min_bitrate"]} | Max: {bit_rate_data["max_bitrate"]} | Standard Deviation: '
+                 f'{bit_rate_data["std_bitrate"]}')
     plt.xlabel('Seconds')
     plt.ylabel('Video Bitrate (Mbps)')
     plt.grid(True)
 
     # actually plot the data
     bitrate_line, = plt.plot(seconds, bitrates,
-                             label=f'Bitrate (Average: {avg_bitrate})')
+                             label=f'Bitrate (Average: {bit_rate_data["avg_bitrate"]})')
     # plot vertical lines for keyframes
     for frame in keyframes:
         plt.axvline(frame, color='r', linestyle='--', linewidth=1)
@@ -54,5 +57,6 @@ def plot_results(results, graph_title, graph_filename, save_filename=None,dir_na
     # save the plot
     plt.savefig(os.path.join(dir_name, f'{graph_filename}.png'))
     #save to csv
-    if save_filename and dir_name:
-        save_to_file(save_filename,avg_bitrate,min_bitrate,max_bitrate)
+    if csv_file_name and dir_name:
+
+        save_to_file(csv_file_name, bit_rate_data)

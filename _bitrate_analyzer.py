@@ -7,13 +7,12 @@ from tqdm import tqdm
 from os import path
 
 from _file_parser import FileParser
-from _utils import get_framerate_float, get_duration, get_video_metadata
-
+from _utils import VideoAttributeExtractor
 
 def analyze_bitrate(video_path, format='xml',dir_name=None):
-    video_metadata = get_video_metadata(video_path)
-    duration = round(float(get_duration(video_metadata)), 2)
-    fps = get_framerate_float(video_metadata)
+    video_metadata = VideoAttributeExtractor(video_path)
+    duration = round(float(video_metadata.get_duration()))
+    fps = video_metadata.get_framerate_float()
     fps_rounded = round(fps)
     cpu_count = multiprocessing.cpu_count()
     total_frames = trunc(int(duration) * fps) + 1

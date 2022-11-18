@@ -1,17 +1,25 @@
 import math
 from os import path
 from ffmpeg import probe
+from csv import DictWriter
+from typing import Any
 
-
+CSV_HEADERS = [
+    "avg_bitrate",
+    "max_bitrate",
+    "min_bitrate",
+    "encoder",
+    "std_bitrate"]
 class VideoAttributeExtractor():
     def __init__(self, video_path) -> None:
         self.source_file = video_path
+        self._video_attributes = None
 
     @property 
-    def video_attributes() -> dict:
+    def video_attributes(self) -> dict:
         if not self._video_attributes: 
-            return probe(self.source_file)
-        return self._video_attributes: 
+            self._video_attributes = probe(self.source_file)
+        return self._video_attributes
 
     def get_bitrate(self) -> str:
         bitrate = self.video_attributes['format']['bit_rate']
@@ -26,7 +34,7 @@ class VideoAttributeExtractor():
 
 
     def get_framerate_float(self) -> str:
-        numerator, denominator = get_framerate_fraction(self.video_attributes).split('/')
+        numerator, denominator = self.get_framerate_fraction().split('/')
         return round((int(numerator) / int(denominator)), 3)
 
 
@@ -46,10 +54,18 @@ def get_pretty_codec_name(codec) -> dict:
 
     return dict.get(codec, codec)
     
-def save_to_file(csv_filename, avg_bitrate, min_bitrate, max_bitrate):
+def save_to_file(csv_filename, bit_rate_data: dict=None):
+    dict_as_csv = [bit_rate_data]
+    """Save Bit Rate Data to file
+
+    Args:
+        csv_filename (str): _description_
+        bit_rate_data (dict): Video analysis results
+    """  
     if not path.isfile(csv_filename):
-        with open(csv_filename, 'a') as file:
-            file.write("Average Bitrate,Minimum Bitrate,Max BitRate" + "\n")
-        
-    with open(csv_filename, 'a') as file:
-        file.write(avg_bitrate + "," + min_bitrate+ "," + max_bitrate + "," +"\n")
+        with open(csv_filename, 'a') as csv_file:
+            csv_writer = DictWriter(csv_file, fieldnames=CSV_HEADERS)
+            csv_writer.writeheader()
+            for bit_rate_row in dict_as_csv:
+                print(bit_rate_row)
+                csv_writer.writerow(bit_rate_row)
