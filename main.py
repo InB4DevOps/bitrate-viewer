@@ -2,6 +2,7 @@ from argparse import ArgumentParser, RawTextHelpFormatter
 import os
 from pathlib import Path
 import sys
+from matplotlib import font_manager
 
 from _bitrate_analyzer import analyze_bitrate
 from _plotter import plot_results
@@ -21,14 +22,23 @@ def main():
                         type=str, default='xml', choices=['xml', 'json'],
                         help='Specify the output format for the file written\n'
                              'by FFProbe. (default: \'xml\')')
+    parser.add_argument('-F', '--font',
+                        type=str,
+                        help='Specify the font of the texts in the plot globally.\n'
+                             '(default: System default English font)')
 
     arguments = parser.parse_args()
 
     video_file = arguments.input_video_path
     output_format = arguments.output_format
+    font = arguments.font
 
     if not os.path.exists(video_file):
         print('File specified for -i could not be found. Exiting.')
+        sys.exit()
+
+    elif font and font not in [font.name for font in font_manager.fontManager.ttflist]:
+        print('Font specified for -F could not be found. Exiting.')
         sys.exit()
 
     results = analyze_bitrate(video_file, output_format)
@@ -37,7 +47,7 @@ def main():
     graph_title = Path(video_file).name
     graph_filename = Path(video_file).stem
 
-    plot_results(results, graph_title, graph_filename)
+    plot_results(results, graph_title, graph_filename, font)
     print(f'Done. Check {graph_filename}.png and '
           f'{graph_filename}.{output_format}!')
 
