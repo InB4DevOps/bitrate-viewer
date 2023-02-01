@@ -8,7 +8,7 @@ import sys
 from _bitrate_analyzer import analyze_bitrate
 from _plotter import plot_results
 
-DIR_OUTPUT = "./BitRate_Reports"
+DIR_OUTPUT = "./Bitrate_Reports"
 
 
 def main():
