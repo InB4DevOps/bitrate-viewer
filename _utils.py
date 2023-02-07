@@ -61,11 +61,11 @@ def save_to_file(csv_filename, bit_rate_data: dict=None):
     Args:
         csv_filename (str): _description_
         bit_rate_data (dict): Video analysis results
-    """  
-    if not path.isfile(csv_filename):
-        with open(csv_filename, 'a') as csv_file:
-            csv_writer = DictWriter(csv_file, fieldnames=CSV_HEADERS)
+    """
+    with open(csv_filename, 'a') as csv_file:
+        csv_writer = DictWriter(csv_file, fieldnames=CSV_HEADERS)
+        if not path.isfile(csv_filename):
             csv_writer.writeheader()
-            for bit_rate_row in dict_as_csv:
-                print(bit_rate_row)
-                csv_writer.writerow(bit_rate_row)
+        for bit_rate_row in dict_as_csv:
+            print(bit_rate_row)
+            csv_writer.writerow(bit_rate_row)
