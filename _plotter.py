@@ -21,6 +21,7 @@ def plot_results(results, graph_title, graph_filename, csv_file_name=None, dir_n
         # drop keyframes
         keyframes = []
     bit_rate_data = {}
+    bit_rate_data['video_name'] = graph_filename
     bit_rate_data['avg_bitrate'] = get_mbit_str(round(np.mean(bitrates), 2))
     bit_rate_data['min_bitrate'] = get_mbit_str(round(min(bitrates), 2))
     bit_rate_data['max_bitrate'] = get_mbit_str(round(max(bitrates), 2))
@@ -56,7 +57,7 @@ def plot_results(results, graph_title, graph_filename, csv_file_name=None, dir_n
 
     # save the plot
     plt.savefig(os.path.join(dir_name, f'{graph_filename}.png'))
-    #save to csv
-    if csv_file_name and dir_name:
 
-        save_to_file(csv_file_name, bit_rate_data)
+    # Save to csv
+    if csv_file_name and dir_name:
+        save_to_file(bit_rate_data, csv_file_name)
